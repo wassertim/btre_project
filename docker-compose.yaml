@@ -1,0 +1,35 @@
+version: '3'
+services:
+  db:
+    image: library/postgres:11.1-alpine
+    restart: unless-stopped
+    networks:
+      - btre-backend-tier
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "btredb"
+      POSTGRES_PASSWORD: "postgres"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - 5432:5432
+  btre-web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        STATIC_URL: '/static/'
+    restart: unless-stopped
+    networks:
+      - btre-backend-tier
+    command: bash -c "sleep 2 && python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./btre:/app/btre
+
+networks:
+  btre-backend-tier:
+    driver: bridge
