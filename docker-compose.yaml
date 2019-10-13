@@ -22,13 +22,17 @@ services:
     restart: unless-stopped
     networks:
       - btre-backend-tier
-    command: bash -c "sleep 2 && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
     ports:
       - 8000:8000
     volumes:
       - ./btre:/app/btre
+      - ./listings:/app/listings
+      - ./realtors:/app/realtors
+      - ./templates:/app/templates
+      - ./pages:/app/pages
 
 networks:
   btre-backend-tier:

@@ -2,5 +2,4 @@
 **/*.pyc
 *.sqlite
 node_modules
-static
 postgres
